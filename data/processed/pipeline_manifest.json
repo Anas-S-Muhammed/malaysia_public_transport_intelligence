@@ -1,0 +1,14 @@
+{
+  "source": "https://data.gov.my/data-catalogue/ridership_headline",
+  "raw_sha256": "379e9b3f9bacaa0cadb9952fd654f7cdd1c68f235b189e0cf2855853adefb8bc",
+  "raw_rows": 2800,
+  "clean_rows": 2800,
+  "long_rows": 39200,
+  "date_min": "2019-01-01",
+  "date_max": "2026-08-31",
+  "date_gaps": 0,
+  "exact_duplicates_removed": 0,
+  "observed_cells": 27007,
+  "ridership_sum": 2171340402,
+  "policy": "Nulls and zeros preserved; conflicts, invalid dates/counts and schema changes rejected."
+}
