@@ -54,6 +54,25 @@ def test_tampered_reshape_detected(raw):
         validate_outputs(clean, long)
 
 
+@pytest.mark.parametrize("observed,value", [(False, True), (True, False), (False, None)])
+def test_invalid_observation_flag_rejected(raw, observed, value):
+    clean = clean_data(raw)
+    long = reshape_data(clean)
+    long["is_observed"] = long["is_observed"].astype(object)
+    long.loc[long.ridership.notna().eq(observed), "is_observed"] = value
+    with pytest.raises(ValueError, match="Observation flags"):
+        validate_outputs(clean, long)
+
+
+@pytest.mark.parametrize("field,value", [("service", "Wrong service"), ("mode", "Wrong mode"), ("mode", None)])
+def test_invalid_service_mapping_rejected(raw, field, value):
+    clean = clean_data(raw)
+    long = reshape_data(clean)
+    long.loc[0, field] = value
+    with pytest.raises(ValueError, match=f"Invalid {field} mapping"):
+        validate_outputs(clean, long)
+
+
 def test_rolling_calendar_gap_and_early_windows():
     dates = pd.date_range("2024-01-01", periods=40).delete(15)
     raw = pd.DataFrame({"date": dates.strftime("%Y-%m-%d"), **{c: 10 for c in SERVICES}})

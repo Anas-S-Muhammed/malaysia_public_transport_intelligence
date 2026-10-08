@@ -76,7 +76,7 @@ The [Tableau export](data/processed/tableau_ridership.csv), [three-dashboard spe
 
 ## Validation and limitations
 
-The pipeline reconstructs the full wide table from long rows, including null positions, and verifies daily totals. Tests cover corrupted counts, conflicting duplicates, invalid dates/schema, zero denominators, incomplete comparisons and calendar gaps. SQL checks independently reconcile every raw daily sum and verify keys, domains and date continuity. The raw snapshot remains unchanged.
+The pipeline reconstructs the full wide table from long rows, including null positions, and verifies daily totals, observation flags and service/mode mappings. Tests cover corrupted counts and metadata, conflicting duplicates, invalid dates/schema, zero denominators, incomplete comparisons and calendar gaps. SQL growth is compared with a fresh Python calculation from the raw snapshot rather than a saved report. SQL checks independently reconcile every raw daily sum and verify keys, domains and date continuity. The raw snapshot remains unchanged.
 
 Anomaly flags compare counts with the preceding eight matching weekdays and require both an absolute z-score of at least 4 and an absolute deviation of at least 25%. This is an exploratory screening rule, sensitive to holidays and trends. Neither flags nor coincident changes establish a cause. No public-holiday, station, origin-destination, timetable, capacity or disruption data is included.
 

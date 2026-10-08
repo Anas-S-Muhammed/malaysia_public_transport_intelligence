@@ -73,6 +73,12 @@ def validate_outputs(clean, long):
         raise ValueError("Required long fields are missing")
     if long.duplicated(["date", "service_code"]).any() or long["service"].isna().any():
         raise ValueError("Invalid date-service key or service name")
+    if long["is_observed"].isna().any() or not long["is_observed"].eq(long["ridership"].notna()).all():
+        raise ValueError("Observation flags do not match ridership availability")
+    for field, position in (("service", 0), ("mode", 1)):
+        expected = long["service_code"].map({code: labels[position] for code, labels in SERVICES.items()})
+        if long[field].isna().any() or not long[field].eq(expected).all():
+            raise ValueError(f"Invalid {field} mapping for service codes")
     if long["ridership"].lt(0).any():
         raise ValueError("Negative processed count")
     if len(long) != len(clean) * len(SERVICES):
